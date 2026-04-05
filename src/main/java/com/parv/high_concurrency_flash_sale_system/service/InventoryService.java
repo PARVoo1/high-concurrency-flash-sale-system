@@ -5,6 +5,7 @@ import com.parv.high_concurrency_flash_sale_system.repository.InventoryRepositor
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -13,6 +14,7 @@ public class InventoryService {
 
     private final InventoryRepository inventoryRepository;
 
+    @Transactional
     public void updateInventory(String productId){
         Inventory inventory = inventoryRepository.findByProductId(productId);
         if(inventory.getStock()>0){
