@@ -12,8 +12,8 @@ import lombok.Data;
 public class Inventory {
     @Id
     Long id;
-    String productId;
-    String productName;
-    int stock;
+    private String productId;
+    private String productName;
+    private int stock;
 }
 
