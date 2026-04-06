@@ -27,7 +27,7 @@ public class HighConcurrencyFlashSaleSystemApplication {
 
 			repository.save(item);
 
-			redisTemplate.opsForValue().set("PROD-001","10");
+			redisTemplate.opsForValue().set("inventory:PROD-001:stock", "10");
 
 			log.info("Data Seeded: PROD-001 with 10 items.");
 		};

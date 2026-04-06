@@ -25,7 +25,7 @@ public class InventoryService {
 
     public void updateInventory(String productId){
 
-        String redisKey = productId+"_STOCK";
+        String redisKey ="inventory:"+productId+":stock";
 
         DefaultRedisScript<Long> script = new DefaultRedisScript<>();
         script.setScriptText(LUA_SCRIPT);
