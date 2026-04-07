@@ -22,8 +22,9 @@ public class OrderListener {
         try{
             OrderEvent event =objectMapper.readValue(message, OrderEvent.class);
             log.info("Received Order Event: {}", event);
+            String productId = event.getProductId();
 
-            inventoryRepository.findById(1L).ifPresent(inventory ->{
+            inventoryRepository.findByProductId(productId).ifPresent(inventory ->{
                 inventory.setStock(inventory.getStock()-1);
                 inventoryRepository.save(inventory);
             });

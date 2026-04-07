@@ -1,14 +1,15 @@
 package com.parv.high_concurrency_flash_sale_system.entity;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Data
 @Entity
+@Table
 public class Inventory {
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     Long id;
     private String productId;
     private String productName;
