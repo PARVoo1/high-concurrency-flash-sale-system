@@ -1,20 +1,20 @@
 package com.parv.high_concurrency_flash_sale_system.listener;
 
 
-
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.parv.high_concurrency_flash_sale_system.event.OrderEvent;
 import com.parv.high_concurrency_flash_sale_system.repository.InventoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
-import tools.jackson.databind.ObjectMapper;
+
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 public class OrderListener {
-    private final ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper =new ObjectMapper();
     private final InventoryRepository inventoryRepository;
 
     @KafkaListener(topics = "orders-topic", groupId = "flash-sale-group")

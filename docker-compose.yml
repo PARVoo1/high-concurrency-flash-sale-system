@@ -21,6 +21,16 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       CLUSTER_ID: 'flashsale1234567890abc'
 
+  db:
+    image: postgres:15
+    container_name: flash-sale-db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: sa
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: flashsale
+
   app:
     build: .
     container_name: flash-sale-app
@@ -29,7 +39,13 @@ services:
     depends_on:
       - redis
       - kafka
+      - db
     environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/flashsale
+      - SPRING_DATASOURCE_USERNAME=sa
+      - SPRING_DATASOURCE_PASSWORD=password
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.PostgreSQLDialect
       - SPRING_DATA_REDIS_HOST=redis
       - SPRING_DATA_REDIS_PORT=6379
       - SPRING_KAFKA_PRODUCER_BOOTSTRAP_SERVERS=kafka:9092

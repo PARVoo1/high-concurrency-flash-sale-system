@@ -15,7 +15,12 @@ public class InventoryController {
 
     @PostMapping("/{productId}")
     public ResponseEntity<Inventory> purchase(@PathVariable String productId) {
-        inventoryService.updateInventory(productId);
-        return ResponseEntity.ok().build();
+        try{
+            inventoryService.updateInventory(productId);
+            return ResponseEntity.ok().build();
+        }catch (Exception e){
+            return ResponseEntity.badRequest().build();
+        }
+
     }
 }

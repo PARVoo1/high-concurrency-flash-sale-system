@@ -9,7 +9,7 @@ import lombok.Data;
 @Table
 public class Inventory {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     private String productId;
     private String productName;
