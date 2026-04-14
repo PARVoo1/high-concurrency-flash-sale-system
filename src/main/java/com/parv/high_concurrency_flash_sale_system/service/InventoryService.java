@@ -8,6 +8,7 @@ import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.util.Collections;
 
 @Service
@@ -24,7 +25,18 @@ public class InventoryService {
                     "redis.call('DECR', KEYS[1]) " +
                     "return 1 ";
 
-    public void updateInventory(String productId){
+    public String updateInventory(String productId, String userId) {
+
+        String rateLimitKey="rate_limit"+userId;
+
+        Long requestCount=redisTemplate.opsForValue().increment(rateLimitKey,1);
+        if(requestCount!=null&&requestCount==1){
+            redisTemplate.expire(rateLimitKey, Duration.ofSeconds(1));
+        }
+        if(requestCount!=null&&requestCount>5){
+            log.warn("🚨 SPAM BLOCKED: User {} exceeded 5 requests per second", userId);
+            return "RATE_LIMITED";
+        }
 
         String redisKey ="inventory:"+productId+":stock";
 
@@ -37,15 +49,17 @@ public class InventoryService {
         if(result!=null && result==1){
             log.info("Success: Order Placed for{}",productId);
 
-            OrderEvent event = new OrderEvent(productId, "CONFIRMED", System.currentTimeMillis());
+            OrderEvent event = new OrderEvent(productId,productId, "CONFIRMED", System.currentTimeMillis());
 
             kafkaTemplate.send("orders-topic", productId, event);
 
             log.info("ASYNC: Ticket sent to Kafka queue for {}", productId);
+            return "TICKET_SENT";
 
         }
         else{
             log.info("Out of Stock{}",productId);
+            return "OUT_OF_STOCK";
         }
     }
 

@@ -1,8 +1,7 @@
 package com.parv.high_concurrency_flash_sale_system.controller;
-
-import com.parv.high_concurrency_flash_sale_system.entity.Inventory;
 import com.parv.high_concurrency_flash_sale_system.service.InventoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,13 +13,16 @@ public class InventoryController {
     private final InventoryService inventoryService;
 
     @PostMapping("/{productId}")
-    public ResponseEntity<Inventory> purchase(@PathVariable String productId) {
-        try{
-            inventoryService.updateInventory(productId);
+    public ResponseEntity<String> purchase(@PathVariable String productId,@RequestHeader("X-User-Id") String userId) {
+            String response = inventoryService.updateInventory(productId, userId);
+            if(response.equals("RATE_LIMITED")){
+                return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body("Error: Too many requests. Please slow down.");
+            }
+            else if (response.equals("OUT_OF_STOCK")) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: Item is out of stock.");
+            }
             return ResponseEntity.ok().build();
-        }catch (Exception e){
-            return ResponseEntity.badRequest().build();
-        }
+
 
     }
 }
