@@ -49,7 +49,7 @@ public class InventoryService {
         if(result!=null && result==1){
             log.info("Success: Order Placed for{}",productId);
 
-            OrderEvent event = new OrderEvent(productId,productId, "CONFIRMED", System.currentTimeMillis());
+            OrderEvent event = new OrderEvent(productId,userId, "CONFIRMED", System.currentTimeMillis());
 
             kafkaTemplate.send("orders-topic", productId, event);
 
