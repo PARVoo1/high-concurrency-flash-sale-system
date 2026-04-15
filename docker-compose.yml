@@ -30,6 +30,11 @@ services:
       POSTGRES_USER: sa
       POSTGRES_PASSWORD: password
       POSTGRES_DB: flashsale
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U sa -d flashsale" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   app:
     build: .
@@ -37,9 +42,12 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - redis
-      - kafka
-      - db
+      redis:
+        condition: service_started
+      kafka:
+        condition: service_started
+      db:
+        condition: service_healthy
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/flashsale
       - SPRING_DATASOURCE_USERNAME=sa
