@@ -27,11 +27,11 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_USER: sa
-      POSTGRES_PASSWORD: password
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: flashsale
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U sa -d flashsale" ]
+      test: [ "CMD-SHELL", "pg_isready -U ${DB_USER} -d flashsale" ]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -50,8 +50,8 @@ services:
         condition: service_healthy
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/flashsale
-      - SPRING_DATASOURCE_USERNAME=sa
-      - SPRING_DATASOURCE_PASSWORD=password
+      - SPRING_DATASOURCE_USERNAME=${DB_USER}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.PostgreSQLDialect
       - SPRING_DATA_REDIS_HOST=redis
@@ -75,7 +75,7 @@ services:
       ports:
         - "3000:3000"
       environment:
-        - GF_SECURITY_ADMIN_USER=admin
-        - GF_SECURITY_ADMIN_PASSWORD=admin
+        - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER}
+        - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD}
       depends_on:
         - prometheus
