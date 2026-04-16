@@ -1,6 +1,5 @@
 local tokens_key = KEYS[1]
 local timestamp_key = KEYS[2]
-
 local capacity = tonumber(ARGV[1])
 local refill_rate = tonumber(ARGV[2])
 local now = tonumber(ARGV[3])
@@ -16,7 +15,6 @@ end
 
 local time_passed = math.max(0, now - last_refreshed)
 local tokens_to_add = time_passed * refill_rate
-
 current_tokens = math.min(capacity, current_tokens + tokens_to_add)
 
 local allowed = 0

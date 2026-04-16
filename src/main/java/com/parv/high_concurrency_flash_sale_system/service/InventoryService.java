@@ -11,7 +11,6 @@ import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
-import java.time.Duration;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -23,7 +22,7 @@ public class InventoryService {
     private final KafkaTemplate<String, OrderEvent> kafkaTemplate;
     private final StringRedisTemplate redisTemplate;
 
-    @Value("classpath:scripts/token_bucket.lua")
+    @Value("classpath:scripts/token_bucker.lua")
     private Resource tokenBucketScriptResource;
 
     private DefaultRedisScript<Long> tokenScript;
@@ -52,7 +51,7 @@ public class InventoryService {
 
         String capacity="5";
         String refillRate="1";
-        String now=String.valueOf(System.currentTimeMillis());
+        String now=String.valueOf(System.currentTimeMillis() / 1000L);
         String requested="1";
 
         Long isAllowed=redisTemplate.execute(tokenScript,keys,capacity,refillRate,now,requested);
