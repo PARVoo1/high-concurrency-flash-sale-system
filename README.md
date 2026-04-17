@@ -47,21 +47,20 @@ The system was load-tested using `oha` with **500 concurrent workers** and **10,
    ```bash
    git clone [https://github.com/yourusername/high-concurrency-flash-sale-system.git](https://github.com/yourusername/high-concurrency-flash-sale-system.git)
    cd high-concurrency-flash-sale-system
-Ensure Docker is running.
+2. **Ensure Docker is running.**
 
-Configure Environment Variables:
-Create a .env file in the root directory and add your Base64 JWT secret:
+3. **Configure Environment Variables:**
+   Create a `.env` file in the root directory and add your Base64 JWT secret:
+   ```env
+   JWT_KEY=your_base64_secret_key_here
+4. **Spin up the cluster:**
+   ```bash
+   docker compose up --build -d
+   
+5. **View Metrics:**
+   Access Grafana at [http://localhost:3000 (Login: admin / admin) and import dashboard ID 19004.]
 
-Code snippet
-JWT_KEY=your_base64_secret_key_here
-Spin up the cluster:
-
-Bash
-docker compose up --build -d
-View Metrics:
-Access Grafana at http://localhost:3000 (Login: admin / admin) and import dashboard ID 19004.
-
-🔮 Future Improvements
+## 🔮 Future Improvements
 [ ] Distributed Caching Locks: Implementing a Distributed Lock (Redlock) for multi-node consistency.
 
 [ ] Kafka DLQ: Adding a dead-letter queue (DLQ) in Kafka for failed order processing.
