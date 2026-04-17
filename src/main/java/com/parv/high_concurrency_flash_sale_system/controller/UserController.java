@@ -16,16 +16,23 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/login")
+    @PostMapping("/signup")
     public ResponseEntity<User> signUp(@RequestBody User user) {
-        Boolean savedUser = userService.signUp(user.getUsername(), user.getPassword(), user.getEmail());
-        if (savedUser) {
-            return ResponseEntity.ok(user);
+        String jwt = userService.signUp(user);
+        if (jwt != null) {
+            user.setPassword(null);
+            return ResponseEntity.ok().header("Authorization", "Bearer " + jwt).body(user);
         } else {
             return ResponseEntity.badRequest().build();
-
         }
-
-
+    }
+    @PostMapping("/login")
+    public ResponseEntity<User> login(@RequestBody User user) {
+        String jwt = userService.logIn(user);
+        if (jwt != null) {
+            user.setPassword(null);
+            return ResponseEntity.ok().header("Authorization", "Bearer " + jwt).body(user);
+        }
+        return ResponseEntity.badRequest().build();
     }
 }
