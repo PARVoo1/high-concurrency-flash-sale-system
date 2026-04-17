@@ -61,6 +61,6 @@ The system was load-tested using `oha` with **500 concurrent workers** and **10,
    Access Grafana at [http://localhost:3000 (Login: admin / admin) and import dashboard ID 19004.]
 
 ## 🔮 Future Improvements
-* **Distributed Caching Locks: Implementing a Distributed Lock (Redlock) for multi-node consistency.
+* Distributed Caching Locks: Implementing a Distributed Lock (Redlock) for multi-node consistency.
 
-* **Kafka DLQ: Adding a dead-letter queue (DLQ) in Kafka for failed order processing.
+* Kafka DLQ: Adding a dead-letter queue (DLQ) in Kafka for failed order processing.
