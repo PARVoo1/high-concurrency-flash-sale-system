@@ -21,10 +21,10 @@ public class UserService {
     public String signUp (User user) {
 
         if (userRepository.existsByUsername(user.getUsername())) {
-            throw new RuntimeException("Username already exists");
+            log.error("Username already exists");
         }
         if (userRepository.existsByEmail(user.getEmail())) {
-            throw new RuntimeException("Email already exists");
+            log.error("Email already exists");
         }
         user.setPassword(encoder.encode(user.getPassword()));
 
@@ -38,7 +38,7 @@ public class UserService {
         boolean isPasswordCorrect = encoder.matches(user.getPassword(), savedUser.getPassword());
 
         if (!isPasswordCorrect) {
-            throw new RuntimeException("Invalid username or password");
+            log.error("Invalid username or password");
         }
 
         return jwtUtil.generateToken(savedUser.getUsername());
