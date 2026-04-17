@@ -58,6 +58,7 @@ services:
       - SPRING_DATA_REDIS_PORT=6379
       - SPRING_KAFKA_PRODUCER_BOOTSTRAP_SERVERS=kafka:9092
       - SPRING_KAFKA_CONSUMER_BOOTSTRAP_SERVERS=kafka:9092
+      - JWT_KEY=${JWT_KEY}
 
   prometheus:
     image: prom/prometheus:latest
